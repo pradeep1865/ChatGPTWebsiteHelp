@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(overlay);
   };
 
+
   const attach = () => {
     document.querySelectorAll('svg.lucide-user').forEach(icon => {
       const btn = icon.closest('button');
