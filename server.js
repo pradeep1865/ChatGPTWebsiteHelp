@@ -24,7 +24,6 @@ passport.deserializeUser(async (id, done) => {
 
 passport.use(new GoogleStrategy(
   {
-
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
@@ -48,7 +47,6 @@ passport.use(new GoogleStrategy(
 
 passport.use(new FacebookStrategy(
   {
-
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: '/auth/facebook/callback',
@@ -102,8 +100,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -115,13 +111,11 @@ app.get('/login.html', (req, res) => {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-
   (req, res) => { res.redirect('/'); }
 );
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 app.get('/auth/facebook/callback',
-
   passport.authenticate('facebook', { failureRedirect: '/' }),
   (req, res) => { res.redirect('/'); }
 );
@@ -129,7 +123,6 @@ app.get('/auth/facebook/callback',
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
-
   (req, res) => { res.redirect('/'); }
 );
 
