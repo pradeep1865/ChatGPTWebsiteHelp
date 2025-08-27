@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Mitr:wght@400&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Mitr', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #fff;
@@ -7,14 +9,18 @@ body {
 }
 
 header {
-    background-color: #d62828; /* Uniqlo red */
-    color: white;
-    padding: 1rem;
+    background-color: #e5e5e5;
+    color: #333;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
     margin: 0;
     font-size: 2rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 nav ul {
@@ -26,19 +32,33 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: #333;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #81b29a;
 }
 
 .hero {
-    background-color: #f5f5f5; /* Muji neutral */
+    background-color: #81b29a;
+    color: #fff;
     padding: 4rem 2rem;
     text-align: center;
 }
 
-section h2 {
-    color: #d62828;
+.hero h2 {
+    color: #fff;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+h2, h3 {
+    color: #81b29a;
 }
 
 .product-grid {
@@ -50,13 +70,25 @@ section h2 {
 
 .product {
     background: #fff;
-    border: 1px solid #eee;
+    border: 1px solid #e5e5e5;
     padding: 1rem;
     text-align: center;
 }
 
+button, .button {
+    background-color: #81b29a;
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+}
+
+button:hover, .button:hover {
+    background-color: #008a06;
+}
+
 footer {
-    background-color: #eee;
+    background-color: #e5e5e5;
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
