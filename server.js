@@ -5,8 +5,10 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('./models/User');
+const path = require('path');
 
 const app = express();
+app.use(express.static(path.join(__dirname)));
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/chatgptwebsitehelp');
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -73,6 +75,14 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback',

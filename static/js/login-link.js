@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       z-index:10000;';
 
     const iframe = document.createElement('iframe');
-    iframe.src = 'https://chat.openai.com/auth/login';
+    iframe.src = 'login.html';
     iframe.style.cssText = 'width:90%;height:80%;border:0;border-radius:8px;background:#fff;';
 
     const close = document.createElement('button');
