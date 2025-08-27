@@ -7,40 +7,49 @@
         document.head.appendChild(link);
     }
 
-    // Inject styling for the Megumi header
+    // Styling for the Megumi brand
     const style = document.createElement('style');
     style.textContent = `
-        #megumi-page-title {
+        #megumi-brand {
+            position: fixed;
+            top: 0.5rem;
+            left: 0.75rem;
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            text-align: center;
-            margin: 1rem 0 0.5rem;
+            font-size: 1.5rem;
+            z-index: 1000;
         }
     `;
     document.head.appendChild(style);
 
-    const targetTitles = ['Iron Man Store', 'Princess Palace', 'Family Corner'];
+    function getContrastColor(bg) {
+        const match = bg.match(/\d+/g);
+        if (!match) return '#000';
+        const [r, g, b] = match.map(Number);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 125 ? '#000' : '#fff';
+    }
 
-    const insertHeader = () => {
-        const heading = Array.from(document.querySelectorAll('h1, h2, h3'))
-            .find(el => targetTitles.includes(el.textContent.trim()));
+    function insertBrand() {
+        if (document.getElementById('megumi-brand')) return;
+        const brand = document.createElement('div');
+        brand.id = 'megumi-brand';
+        brand.textContent = 'Megumi';
+
+        const heading = document.querySelector('h1, h2, h3, h4, h5, h6');
         if (heading) {
-            let header = document.getElementById('megumi-page-title');
-            if (!header) {
-                header = document.createElement('div');
-                header.id = 'megumi-page-title';
-                header.textContent = 'Megumi';
-            }
-            // Match the color of the page heading
-            header.style.color = window.getComputedStyle(heading).color;
-            heading.parentNode.insertBefore(header, heading);
+            brand.style.color = window.getComputedStyle(heading).color;
+        } else {
+            const bg = window.getComputedStyle(document.body).backgroundColor;
+            brand.style.color = getContrastColor(bg);
         }
-    };
 
-    // Observe DOM mutations to handle SPA navigation
-    const observer = new MutationObserver(insertHeader);
-    observer.observe(document.body, { childList: true, subtree: true });
+        document.body.appendChild(brand);
+    }
 
-    // Initial attempt
-    insertHeader();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', insertBrand);
+    } else {
+        insertBrand();
+    }
 })();
