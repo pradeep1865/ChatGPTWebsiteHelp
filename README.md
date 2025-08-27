@@ -1,15 +1,9 @@
-# Megumi Kids Store
+# Kids Fashion Hero
 
-Static website showcasing Japanese-inspired products for children aged 0–16.
+Static build pulled from https://kids-fashion-hero.preview.emergentagent.com/.
 
-## Pages
-- `index.html` – home page with navigation
-- `all-products.html` – quick links to every category
-- `clothes.html` – boys and girls clothing sections
-- `toys.html` – unisex, boys, girls and toddler toys
-- `care.html` – creams and care products
-- `cart.html` – sample cart with Razorpay checkout (India)
+## Usage
+Open `index.html` in a browser; the app loads from `static/js/bundle.js`.
 
-Images are loaded from public Unsplash URLs. Payment uses a Razorpay test key and does not charge real money.
-
-Open the HTML files in a browser to view the site.
+## Notes
+This repository mirrors the external site; no build scripts or tests are included.
