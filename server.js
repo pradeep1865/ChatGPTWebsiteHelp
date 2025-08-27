@@ -4,6 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('./models/User');
 const path = require('path');
 
@@ -23,8 +24,8 @@ passport.deserializeUser(async (id, done) => {
 
 passport.use(new GoogleStrategy(
   {
-    clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'GOOGLE_CLIENT_SECRET',
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
   },
   async (accessToken, refreshToken, profile, done) => {
@@ -46,8 +47,8 @@ passport.use(new GoogleStrategy(
 
 passport.use(new FacebookStrategy(
   {
-    clientID: process.env.FACEBOOK_CLIENT_ID || 'FACEBOOK_CLIENT_ID',
-    clientSecret: process.env.FACEBOOK_CLIENT_SECRET || 'FACEBOOK_CLIENT_SECRET',
+    clientID: process.env.FACEBOOK_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: '/auth/facebook/callback',
     profileFields: ['id', 'displayName', 'emails'],
   },
@@ -58,6 +59,30 @@ passport.use(new FacebookStrategy(
         user = await User.create({
           facebookId: profile.id,
           displayName: profile.displayName,
+          email: profile.emails && profile.emails[0] ? profile.emails[0].value : undefined,
+        });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+));
+
+passport.use(new GitHubStrategy(
+  {
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: '/auth/github/callback',
+    scope: ['user:email'],
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await User.findOne({ githubId: profile.id });
+      if (!user) {
+        user = await User.create({
+          githubId: profile.id,
+          displayName: profile.username,
           email: profile.emails && profile.emails[0] ? profile.emails[0].value : undefined,
         });
       }
@@ -93,6 +118,12 @@ app.get('/auth/google/callback',
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/' }),
+  (req, res) => { res.redirect('/'); }
+);
+
+app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
+app.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/' }),
   (req, res) => { res.redirect('/'); }
 );
 
