@@ -6,10 +6,12 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('./models/User');
+const Product = require('./models/Product');
 const path = require('path');
 
 const app = express();
 app.use(express.static(path.join(__dirname)));
+app.use(express.json());
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/chatgptwebsitehelp');
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -100,6 +102,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -132,6 +135,20 @@ app.get('/api/user', (req, res) => {
   } else {
     res.status(401).json({ error: 'Not authenticated' });
   }
+});
+
+app.post('/api/products', async (req, res) => {
+  try {
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/products', async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
 });
 
 const port = process.env.PORT || 3000;
